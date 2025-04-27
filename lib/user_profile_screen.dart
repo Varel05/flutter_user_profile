@@ -1,112 +1,116 @@
 import 'package:flutter/material.dart';
+import 'materials.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  const UserProfileScreen({super.key});
+  final VoidCallback onToggleTheme;
+
+  const UserProfileScreen({super.key, required this.onToggleTheme});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textColor = colorScheme.onSurface;
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('@user', style: TextStyle(color: Colors.white)),
-            Icon(Icons.arrow_drop_down, color: Colors.white),
+            Text('@user'),
+            Icon(Icons.arrow_drop_down),
           ],
         ),
-        actions: const [
-          Icon(Icons.more_vert, color: Colors.white),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: onToggleTheme,
+          ),
         ],
       ),
       body: Column(
         children: [
-          const SizedBox(height: 10),
-          CircleAvatar(
-            radius: 40,
-            backgroundColor: Colors.grey[700],
-            child: const Icon(Icons.person, size: 60, color: Colors.white),
-          ),
-          const SizedBox(height: 8),
-          const Text('@user', style: TextStyle(color: Colors.white)),
+          profile(textColor),
+          status(textColor),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildStatColumn('256', 'Following'),
-              const SizedBox(width: 24),
-              _buildStatColumn('256.7K', 'Followers'),
-              const SizedBox(width: 24),
-              _buildStatColumn('5.2M', 'Likes'),
+              const ProfileButton(text: 'Edit profile'),
+              const SizedBox(width: 10),
+              const ProfileButton(text: 'Share profile'),
+              const SizedBox(width: 10),
+              Icon(Icons.person_add, color: textColor),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
+          const ProfileButton(text: '+ Add bio'),
+          const SizedBox(height: 12),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildButton('Edit profile'),
-              const SizedBox(width: 10),
-              _buildButton('Share profile'),
-              const SizedBox(width: 10),
-              const Icon(Icons.person_add, color: Colors.white),
-            ],
-          ),
-          const SizedBox(height: 12),
-          _buildButton('+ Add bio'),
-          const SizedBox(height: 12),
-          // Icon bar
-          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Icon(Icons.grid_on, color: Colors.white),
-              Icon(Icons.lock, color: Colors.white),
-              Icon(Icons.favorite_border, color: Colors.white),
-              Icon(Icons.bookmark_border, color: Colors.white),
+              Icon(Icons.grid_on, color: textColor),
+              Icon(Icons.lock, color: textColor),
+              Icon(Icons.favorite_border, color: textColor),
+              Icon(Icons.bookmark_border, color: textColor),
             ],
           ),
           const SizedBox(height: 10),
-          // Dummy video thumbnails
-          Expanded(
-            child: GridView.builder(
-              itemCount: 6,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-              ),
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.all(2),
-                  color: Colors.grey[800],
-                );
-              },
-            ),
-          ),
+          galeri(),
         ],
       ),
     );
   }
 
-  Widget _buildStatColumn(String number, String label) {
+  Expanded galeri() {
+    return Expanded(
+      child: GridView.builder(
+        itemCount: 6,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+        ),
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.all(2),
+            color: Colors.grey[800],
+          );
+        },
+      ),
+    );
+  }
+
+  Column status(Color textColor) {
     return Column(
       children: [
-        Text(number, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        Text(label, style: const TextStyle(color: Colors.grey)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            StatColumn(number: '256', label: 'Following', color: textColor),
+            const SizedBox(width: 24),
+            StatColumn(number: '256.7K', label: 'Followers', color: textColor),
+            const SizedBox(width: 24),
+            StatColumn(number: '5.2M', label: 'Likes', color: textColor),
+          ],
+        ),
       ],
     );
   }
 
-  Widget _buildButton(String text) {
-    return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+  Column profile(Color textColor) {
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        CircleAvatar(
+          radius: 40,
+          backgroundColor: Colors.grey[700],
+          child: Icon(Icons.person, size: 60, color: textColor),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        backgroundColor: Colors.grey[700],
-      ),
-      child: Text(text, style: const TextStyle(color: Colors.white),),
+        const SizedBox(height: 8),
+        Text('@user', style: TextStyle(color: textColor)),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }

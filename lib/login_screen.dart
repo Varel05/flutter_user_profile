@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'user_profile_screen.dart';
+import 'package:get/get.dart';
+import 'main_screen.dart';
+import 'theme_controller.dart';
 
 class LoginScreen extends StatefulWidget {
-  final VoidCallback onToggleTheme;
-
-  const LoginScreen({super.key, required this.onToggleTheme});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -12,8 +12,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final themeController = Get.find<ThemeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.brightness_6),
-            onPressed: widget.onToggleTheme,
+            onPressed: themeController.toggleTheme,
           ),
         ],
       ),
@@ -62,19 +63,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserProfileScreen(onToggleTheme: widget.onToggleTheme),
-                    ),
-                  );
-                },
-                child: const Text('Login'),
-              ),
+            ElevatedButton(
+              onPressed: () {
+                Get.off(() => const MainScreen());
+              },
+              child: const Text('Login'),
             ),
             const Spacer(flex: 3),
           ],

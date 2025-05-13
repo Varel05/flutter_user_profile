@@ -31,23 +31,20 @@ class StatColumn extends StatelessWidget {
 
 class ProfileButton extends StatelessWidget {
   final String text;
-  final VoidCallback? onPressed;
 
-  const ProfileButton({required this.text, this.onPressed, super.key});
+  const ProfileButton({required this.text, super.key});
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
     return ElevatedButton(
-      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: colorScheme.primaryContainer,
-        foregroundColor: colorScheme.onPrimaryContainer,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
+      onPressed: () {},
       child: Text(text),
     );
   }

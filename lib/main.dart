@@ -1,34 +1,27 @@
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'theme_controller.dart';
+import 'splash_screen.dart';
 
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.dark;
-
-  void toggleTheme() {
-    setState(() {
-      _themeMode = _themeMode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final themeController = Get.put(ThemeController());
+
+    return Obx(() => GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: _themeMode,
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
-      home: LoginScreen(onToggleTheme: toggleTheme),
-    );
+      themeMode: themeController.theme,
+      home: const SplashScreen(),
+    ));
   }
 }

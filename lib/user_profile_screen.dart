@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'login_screen.dart';
 import 'materials.dart';
+import 'theme_controller.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  final VoidCallback onToggleTheme;
+  final themeController = Get.find<ThemeController>();
 
-  const UserProfileScreen({super.key, required this.onToggleTheme});
+  UserProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +29,14 @@ class UserProfileScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: onToggleTheme,
+            icon: const Icon(Icons.brightness_6),
+            onPressed: themeController.toggleTheme,
           ),
         ],
       ),
       body: Column(
         children: [
-          profile(textColor),
+          profile(context, textColor),
           status(textColor),
           const SizedBox(height: 16),
           Row(
@@ -43,6 +47,13 @@ class UserProfileScreen extends StatelessWidget {
               const ProfileButton(text: 'Share profile'),
               const SizedBox(width: 10),
               Icon(Icons.person_add, color: textColor),
+              IconButton(
+                onPressed: () {
+                  GetStorage().remove('username');
+                  Get.off(() => const LoginScreen());
+                },
+                icon: const Icon(Icons.logout),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -58,13 +69,13 @@ class UserProfileScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          galeri(),
+          galeri(context),
         ],
       ),
     );
   }
 
-  Expanded galeri() {
+  Expanded galeri(BuildContext context) {
     return Expanded(
       child: GridView.builder(
         itemCount: 6,
@@ -74,12 +85,13 @@ class UserProfileScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return Container(
             margin: const EdgeInsets.all(2),
-            color: Colors.grey[800],
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
           );
         },
       ),
     );
   }
+}
 
   Column status(Color textColor) {
     return Column(
@@ -98,13 +110,13 @@ class UserProfileScreen extends StatelessWidget {
     );
   }
 
-  Column profile(Color textColor) {
+  Column profile(BuildContext context, Color textColor) {
     return Column(
       children: [
         const SizedBox(height: 10),
         CircleAvatar(
           radius: 40,
-          backgroundColor: Colors.grey[700],
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           child: Icon(Icons.person, size: 60, color: textColor),
         ),
         const SizedBox(height: 8),
@@ -113,4 +125,3 @@ class UserProfileScreen extends StatelessWidget {
       ],
     );
   }
-}
